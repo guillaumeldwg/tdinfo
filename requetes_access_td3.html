@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Fiche Révision Express — 12 Requêtes Access (TD3)</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #334155;
+    }
+    h1 {
+      font-size: 24px;
+      color: #38bdf8;
+      margin: 0 0 8px 0;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      font-size: 14px;
+      margin: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #334155;
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #f1f5f9;
+    }
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-filtre { background: #0369a1; color: #e0f2fe; }
+    .badge-total { background: #7c2d12; color: #ffedd5; }
+    .badge-param { background: #4338ca; color: #e0e7ff; }
+    .badge-groupe { background: #065f46; color: #d1fae5; }
+
+    .desc {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    table.qbe {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #0f172a;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #475569;
+    }
+    table.qbe th, table.qbe td {
+      padding: 6px 10px;
+      border: 1px solid #334155;
+      text-align: left;
+    }
+    table.qbe th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-weight: 600;
+      width: 25%;
+    }
+    .val-code {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .val-highlight {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      color: #f43f5e;
+      font-weight: 700;
+      background: rgba(244, 63, 94, 0.1);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+    .note {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Mémo Express : Les 12 Requêtes Access (TD3)</h1>
+    <p class="subtitle">Configuration exacte champ par champ en mode Création de requête (QBE)</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- R1 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R1 — Tri alphabétique</span>
+        <span class="badge badge-filtre">Filtre & Tri</span>
+      </div>
+      <div class="desc">« Afficher la liste des activités triée par ordre alphabétique »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td colspan="2">Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAct</td><td class="val-code">PrixAct</td></tr>
+        <tr><th>Tri</th><td class="val-highlight">Croissant</td><td>—</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td>—</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <!-- R2 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R2 — Seuil de prix</span>
+        <span class="badge badge-filtre">Critère simple</span>
+      </div>
+      <div class="desc">« Afficher les activités dont le prix est strictement supérieur à 15 € »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td colspan="2">Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAct</td><td class="val-code">PrixAct</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td>—</td><td class="val-highlight">&gt;15</td></tr>
+      </table>
+    </div>
+
+    <!-- R3 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R3 — Non gratuit</span>
+        <span class="badge badge-filtre">Critère simple</span>
+      </div>
+      <div class="desc">« Afficher les activités payantes (prix différent de 0 €) »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td colspan="2">Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAct</td><td class="val-code">PrixAct</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td>—</td><td class="val-highlight">&gt;0 <span style="color:#94a3b8">(ou &lt;&gt;0)</span></td></tr>
+      </table>
+    </div>
+
+    <!-- R4 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R4 — Intervalle de prix</span>
+        <span class="badge badge-filtre">Intervalle</span>
+      </div>
+      <div class="desc">« Afficher les activités dont le prix est compris entre 10 et 20 € inclus »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td colspan="2">Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAct</td><td class="val-code">PrixAct</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td>—</td><td class="val-highlight">Entre 10 Et 20</td></tr>
+      </table>
+      <div class="note">Résultat : Natation, HandBall, BeachSoccer</div>
+    </div>
+
+    <!-- R5 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R5 — Comptage total</span>
+        <span class="badge badge-total">Σ Totaux</span>
+      </div>
+      <div class="desc">« Combien de bungalows y a-t-il au total dans le camping ? »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Bungalow</td></tr>
+        <tr><th>Champ</th><td class="val-code">CodeBung</td></tr>
+        <tr><th>Opération (Σ)</th><td class="val-highlight">Compte</td></tr>
+        <tr><th>Critères</th><td>—</td></tr>
+      </table>
+      <div class="note">Résultat attendu : 11</div>
+    </div>
+
+    <!-- R6 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R6 — Compte conditionnel avec « Où »</span>
+        <span class="badge badge-total">Σ Totaux + Où</span>
+      </div>
+      <div class="desc">« Combien de bungalows disposent de la climatisation ? »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Bungalow</td><td>TypeBungalows</td></tr>
+        <tr><th>Champ</th><td class="val-code">CodeBung</td><td class="val-code">Clim</td></tr>
+        <tr><th>Opération (Σ)</th><td class="val-highlight">Compte</td><td class="val-highlight">Où</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td class="val-highlight">☐ (Décoché !)</td></tr>
+        <tr><th>Critères</th><td>—</td><td class="val-highlight">Vrai</td></tr>
+      </table>
+    </div>
+
+    <!-- R7 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R7 — Filtre partiel avec joker *</span>
+        <span class="badge badge-filtre">Opérateur Comme</span>
+      </div>
+      <div class="desc">« Adhérents dont le nom commence par Ni ou code postal dans le Gard (30) »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td colspan="3">Adherent</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAdh</td><td class="val-code">CpAdh</td><td class="val-code">TelPerspAdh</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td class="val-highlight">Comme "Ni*"</td><td class="val-highlight">Comme "30*"</td><td>—</td></tr>
+      </table>
+      <div class="note">Astuce : Si le prof demande les deux séparément, laisse l'autre colonne vide.</div>
+    </div>
+
+    <!-- R8 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R8 — Jointure 2 tables</span>
+        <span class="badge badge-filtre">Jointure</span>
+      </div>
+      <div class="desc">« Afficher chaque activité avec le nom de son professeur responsable »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Activite</td><td>Professeur</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomAct</td><td class="val-code">NomProf</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td>—</td><td>—</td></tr>
+      </table>
+      <div class="note">Le trait noir de jointure sur CodeProf s'affiche automatiquement.</div>
+    </div>
+
+    <!-- R9 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R9 — Moyenne arithmétique</span>
+        <span class="badge badge-total">Σ Totaux</span>
+      </div>
+      <div class="desc">« Quel est le prix moyen d'une activité ? »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">PrixAct</td></tr>
+        <tr><th>Opération (Σ)</th><td class="val-highlight">Moyenne</td></tr>
+        <tr><th>Critères</th><td>—</td></tr>
+      </table>
+    </div>
+
+    <!-- R10 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R10 — Requête paramétrée simple</span>
+        <span class="badge badge-param">Paramètre [ ]</span>
+      </div>
+      <div class="desc">« Afficher les activités d'un professeur dont le nom est saisi au clavier »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Professeur</td><td>Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomProf</td><td class="val-code">NomAct</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td></tr>
+        <tr><th>Critères</th><td class="val-highlight">[Saisir le nom du professeur]</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <!-- R11 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R11 — Compte avec paramètre</span>
+        <span class="badge badge-param">Σ + Paramètre</span>
+      </div>
+      <div class="desc">« Nombre d'activités encadrées par un professeur demandé en paramètre »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Professeur</td><td>Activite</td></tr>
+        <tr><th>Champ</th><td class="val-code">NomProf</td><td class="val-code">RefAct <span style="color:#94a3b8">(ou NomAct)</span></td></tr>
+        <tr><th>Opération (Σ)</th><td class="val-highlight">Où</td><td class="val-highlight">Compte</td></tr>
+        <tr><th>Afficher</th><td class="val-highlight">☐ (Décoché !)</td><td>☑</td></tr>
+        <tr><th>Critères</th><td class="val-highlight">[Saisir le nom du professeur]</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <!-- R12 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">R12 — Regroupement complexe</span>
+        <span class="badge badge-groupe">Regroupement</span>
+      </div>
+      <div class="desc">« Nombre d'adhérents par ville (villes du 34 avec au moins 2 adhérents) »</div>
+      <table class="qbe">
+        <tr><th>Table</th><td>Adherent</td><td>Adherent</td><td>Adherent</td></tr>
+        <tr><th>Champ</th><td class="val-code">CodeAdh</td><td class="val-code">VilleAdh</td><td class="val-code">CpAdh</td></tr>
+        <tr><th>Opération (Σ)</th><td class="val-highlight">Compte</td><td class="val-highlight">Regroupement</td><td class="val-highlight">Où</td></tr>
+        <tr><th>Tri</th><td>—</td><td class="val-highlight">Décroissant</td><td>—</td></tr>
+        <tr><th>Afficher</th><td>☑</td><td>☑</td><td class="val-highlight">☐ (Décoché !)</td></tr>
+        <tr><th>Critères</th><td class="val-highlight">&gt;=2</td><td>—</td><td class="val-highlight">Comme "34*"</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
